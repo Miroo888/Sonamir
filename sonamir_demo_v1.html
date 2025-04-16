@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sonamir Demo</title>
+</head>
+<body style="background-color: #111; color: #fff; font-family: sans-serif; text-align: center; padding: 40px;">
+  <h1>Sonamir Web Demo</h1>
+  <p>Enter text to transmit via sound:</p>
+  <input type="text" id="inputText" placeholder="Type something..." style="width: 80%; padding: 10px;" />
+  <br><br>
+  <button onclick="playSound()" style="padding: 10px 20px; font-size: 16px;">Play Sound</button>
+
+  <script>
+    function textToTone(text) {
+      const context = new AudioContext();
+      let time = context.currentTime;
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i);
+        const oscillator = context.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(300 + (charCode * 5), time);
+        oscillator.connect(context.destination);
+        oscillator.start(time);
+        oscillator.stop(time + 0.2);
+        time += 0.25;
+      }
+    }
+
+    function playSound() {
+      const text = document.getElementById('inputText').value;
+      if (text.trim() !== "") {
+        textToTone(text);
+      } else {
+        alert("Please enter some text first.");
+      }
+    }
+  </script>
+</body>
+</html>
